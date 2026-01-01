@@ -13,6 +13,7 @@ For the most consistent results, we need to use the same Java version as the XII
 
 !!! tip
 
+    (Note, this no longer works due to oracle requiring MFA on all accounts).
     You can either create an account with your email or us this throwaway account below, to avoid creating an account with your email: 
     ```
     email: rebil93626@oziere.com
@@ -110,6 +111,12 @@ We are going to setup a VS Code task, that can be used to quickly compile .java 
 
 Scripts fall into 2 broad categories. There are the base system classes (which will be unpacked as `sys/script_decomp`), and script files loaded as part of other areas of the system (such as `zone` and `btscene`).
 
+While WhiteCLBTool can be used to recompile and convert a .java file all the way into a .clb script, compilation of some scrips (especially those with cross-script references) can be somewhat awkward. In these cases, the compilation can be performed upfront, and the generated .class file converted into a .clb using WhiteCLBTool directly, e.g.:
+
+```
+WhiteCLBtool -c someScript.class
+```
+
 ### Modifying base system scripts
 
 Modifying the base classes is the easiest place to start, as it does not depend on information from other locations. The `javac` step of compiling the `.java` file into a `.class` file should mostly just work as is assuming your directories are setup as expected.
@@ -127,9 +134,11 @@ To improve the workflow, you can build a JAR file of the system scripts, and pro
 - Run javac as follows: `javac name-of-script.java --source-path . -implicit:none -cp ../../path/to/sys.jar`
 - This should build the class file as expected with the references resolved at build time (but not transitively built into .class files).
 
+Alternatively, you can unpack the clbs twice, once with the `--class` option to retain the pre-built class files, and then use these to reference against when compiling modified .java files without having to rebuild the entire tree manually.
+
 ### Common issues from decompilation
 
-When working with `zone` scripts, it should be noted that most zone's `scr255.java` files come out slightly incorrect/corrupted from the decompilation process and will need to be manually adjusted. Usually this is just additional `public` keywords in places where they should not be and can simply be removed.
+Older versions of WhiteCLBTool will sometimes mis-detect class keywords and add an extra `public` keyword to any variable containing the string `class` - this is resolved in the latest release.
 
 Several classes may not be correctly detected as `abstract` and will need the keyword added.
 

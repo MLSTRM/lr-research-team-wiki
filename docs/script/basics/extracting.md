@@ -36,3 +36,5 @@ WhiteCLBtool -d "S:\Steam Library Games 2\steamapps\common\FINAL FANTASY XIII"
 That's it, the codebase is now ready to be used for reading and writing clb scripts.
 
 You can now proceed to this [page](./repacking.md) to setup the repacking utilities.
+
+For more advanced use-cases, and working with scripts that have a large amount of cross-file references, you may find it easier to work with .class files over the raw .java files, simplifying the recompilation process later on. To unpack all of the clb files as .class files without decompilation, pass the `--class` option to the decompilation command.
